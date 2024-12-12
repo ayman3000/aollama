@@ -116,26 +116,41 @@ class SidebarWidget extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.69,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey[700]!),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(2),
               ),
               child: ListView.builder(
                 itemCount: sessionList.length,
                 itemBuilder: (context, index) {
                   final session = sessionList[index];
+
                   return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                    child: RadioListTile(
-                      value: session,
-                      groupValue: selectedSession,
-                      activeColor: Colors.redAccent,
-                      onChanged: (value) {
-                        if (value != null) {
-                          onSessionSelected(session);
-                        }
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      color: session == selectedSession
+                          ? Colors.grey[800]
+                          : Colors.transparent,
+                      borderRadius: BorderRadius.circular(4), // Rectangle with slight rounding
+                      border: session == selectedSession
+                          ? Border.all(
+                        color: Colors.redAccent,
+                        width: 2,
+                      )
+                          : null,
+                    ),
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                        foregroundColor: Colors.white,
+                      ),
+                      onPressed: () {
+                        onSessionSelected(session);
                       },
-                      title: Text(
-                        session.name,
-                        style: const TextStyle(color: Colors.white),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          session.name,
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   );
