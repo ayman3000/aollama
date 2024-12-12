@@ -1,0 +1,39 @@
+name: ollama_client
+description: A Flutter desktop application for managing Ollama client API interactions.
+version: 1.0.0+1
+publish_to: "none" # Prevent accidental publication to pub.dev
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_riverpod: ^2.0.2 # State management
+  http: ^1.0.0 # For API requests
+  sqflite: ^2.2.0 # SQLite database
+  path: ^1.8.3 # For handling file paths
+  provider: ^6.0.0 # Dependency injection
+  intl: ^0.20.0 # For formatting dates and times
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  lint: ^2.0.0
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+# Assets (if you need to include assets like icons or configuration files)
+  assets:
+    - assets/logo.png
+
+# Fonts (optional: define custom fonts here)
+fonts:
+  - family: Roboto
+    fonts:
+      - asset: fonts/Roboto-Regular.ttf
+      - asset: fonts/Roboto-Bold.ttf
+        weight: 700
