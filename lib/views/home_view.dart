@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ollama_client/views/settings_view.dart';
 import '../view_models/chat_view_model.dart';
 import '../models/session.dart';
 import '../view_models/session_provider.dart';
@@ -45,6 +46,22 @@ class HomeView extends ConsumerWidget {
         elevation: 5,
         backgroundColor: Colors.black87,
         title: const AppBarTitleWidget(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'Settings',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SettingsView(
+                    baseUrl: ref.watch(baseUrlProvider), // Replace with current base URL
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: SafeArea(

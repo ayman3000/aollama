@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../services/ollama_service.dart';
+import '../view_models/session_provider.dart'; // Import the service provider
 
-class SettingsView extends StatelessWidget {
+class SettingsView extends ConsumerWidget {
   final TextEditingController _baseUrlController = TextEditingController();
 
   SettingsView({super.key, required String baseUrl}) {
-    _baseUrlController.text = baseUrl; // Set the current base URL
+    _baseUrlController.text = baseUrl;
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
@@ -38,18 +41,15 @@ class SettingsView extends StatelessWidget {
               onPressed: () {
                 final newBaseUrl = _baseUrlController.text.trim();
                 if (newBaseUrl.isNotEmpty) {
-                  // Save the new base URL (e.g., using shared preferences or state management)
+                  // Update the base URL in the global provider
+                  ref.read(baseUrlProvider.notifier).state = newBaseUrl;
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Base URL updated successfully!"),
-                    ),
+                    const SnackBar(content: Text("Base URL updated successfully!")),
                   );
                   Navigator.pop(context); // Go back to the previous screen
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Base URL cannot be empty."),
-                    ),
+                    const SnackBar(content: Text("Base URL cannot be empty.")),
                   );
                 }
               },

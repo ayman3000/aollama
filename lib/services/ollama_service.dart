@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../view_models/session_provider.dart';
+
 class OllamaService {
   final String baseUrl;
 
@@ -29,5 +31,6 @@ class OllamaService {
 }
 
 final ollamaServiceProvider = Provider<OllamaService>((ref) {
-  return OllamaService();
+  final baseUrl = ref.watch(baseUrlProvider); // Watch the current base URL
+  return OllamaService(baseUrl: baseUrl);    // Pass the dynamic base URL
 });

@@ -9,6 +9,7 @@ final selectedSessionProvider = StateProvider<Session?>((ref) => null);
 final selectedModelProvider = StateProvider<String?>((ref) => null);
 final isLoadingProvider = StateProvider<bool>((ref) => false);
 final isSidebarVisibleProvider = StateProvider<bool>((ref) => true);
+final baseUrlProvider = StateProvider<String>((ref) => 'http://localhost:11434');
 
 
 class ChatHistoryNotifier extends StateNotifier<List<Conversation>> {
