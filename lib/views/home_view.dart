@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ollama_client/views/settings_view.dart';
 import '../view_models/chat_view_model.dart';
 import '../models/session.dart';
-import '../view_models/session_provider.dart';
+import '../view_models/providers.dart';
 import '../widgets/appbar_title_widget.dart';
 import '../widgets/chat_header_widget.dart';
 import '../widgets/chat_history_widget.dart';
@@ -68,7 +68,7 @@ class HomeView extends ConsumerWidget {
           child: SingleChildScrollView(
             child: SidebarWidget(
               sessionList: sessionList,
-              models: models,
+              // models: models,
               selectedSession: selectedSession,
               selectedModel: selectedModel,
               onModelSelected: (modelName) {

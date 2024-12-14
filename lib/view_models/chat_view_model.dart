@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/session.dart';
 import '../services/database_service.dart';
 import '../services/ollama_service.dart';
-import '../view_models/session_provider.dart';
+import '../view_models/providers.dart';
 
 
 

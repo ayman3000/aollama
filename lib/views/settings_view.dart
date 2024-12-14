@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ollama_service.dart';
-import '../view_models/session_provider.dart'; // Import the service provider
+import '../view_models/providers.dart'; // Import the service provider
 
 class SettingsView extends ConsumerWidget {
   final TextEditingController _baseUrlController = TextEditingController();
@@ -39,18 +39,27 @@ class SettingsView extends ConsumerWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                final newBaseUrl = _baseUrlController.text.trim();
-                if (newBaseUrl.isNotEmpty) {
-                  // Update the base URL in the global provider
-                  ref.read(baseUrlProvider.notifier).state = newBaseUrl;
+                final newUrl = _baseUrlController.text.trim();
+                if (newUrl.isNotEmpty) {
+                  ref.read(baseUrlProvider.notifier).state = newUrl;
+                  ref.invalidate(modelsProvider); // Trigger models re-fetch
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Base URL updated successfully!")),
+                    const SnackBar(content: Text('Base URL updated!')),
                   );
-                  Navigator.pop(context); // Go back to the previous screen
+                    Navigator.pop(context); // Go back to the previous screen
+
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text("Base URL cannot be empty.")),
+                    const SnackBar(content: Text('Base URL cannot be empty!')),
                   );
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(content: Text("Base URL updated successfully!")),
+                //   );
+                //   Navigator.pop(context); // Go back to the previous screen
+                // } else {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(content: Text("Base URL cannot be empty.")),
+                //   );
                 }
               },
               child: const Text("Save"),

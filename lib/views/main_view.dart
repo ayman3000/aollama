@@ -2,7 +2,7 @@
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
 // import '../view_models/chat_view_model.dart';
 // import '../models/session.dart';
-// import '../view_models/session_provider.dart';
+// import '../view_models/providers.dart';
 // import '../widgets/chat_header_widget.dart';
 // import '../widgets/chat_history_widget.dart';
 // import '../widgets/message_input_widget.dart';

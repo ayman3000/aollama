@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import '../view_models/session_provider.dart';
+import '../view_models/providers.dart';
 
 class OllamaService {
   final String baseUrl;
@@ -16,7 +16,8 @@ class OllamaService {
       final data = json.decode(response.body);
       return List<String>.from(data['models'].map((model) => model['name']));
     }
-    throw Exception('Failed to load models');
+    return [];
+    // throw Exception('Failed to load models');
   }
 
   Future<Map<String, dynamic>> generateResponse(String modelName, String prompt) async {

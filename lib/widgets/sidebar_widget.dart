@@ -5,7 +5,7 @@ import 'models_widget.dart'; // Import ModelsWidget
 class SidebarWidget extends StatelessWidget {
   final List<Session> sessionList;
   final Session? selectedSession;
-  final List<String> models;
+  // final List<String> models;
   final String? selectedModel;
   final Function(String) onModelSelected;
   final Function(String) onNewSession;
@@ -14,7 +14,7 @@ class SidebarWidget extends StatelessWidget {
   const SidebarWidget({
     required this.sessionList,
     required this.selectedSession,
-    required this.models,
+    // required this.models,
     required this.selectedModel,
     required this.onModelSelected,
     required this.onNewSession,
@@ -40,7 +40,7 @@ class SidebarWidget extends StatelessWidget {
             width: double.infinity,
             height: 100,
             child: ModelsWidget(
-              models: models,
+              // models: models,
               selectedModel: selectedModel,
               onModelSelected: onModelSelected,
             ),

@@ -3,7 +3,7 @@ import 'package:ollama_client/models/session.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import '../view_models/session_provider.dart';
+import '../view_models/providers.dart';
 
 class DatabaseService {
   Future<Database> initializeDatabase() async {

@@ -85,3 +85,19 @@ class ModelListNotifier extends StateNotifier<List<String>> {
 
 
 }
+
+// final modelsProvider = FutureProvider<List<String>>((ref) async {
+//   final ollamaService = ref.watch(ollamaServiceProvider);
+//   return ollamaService.getAvailableModels();
+// });
+
+final modelsProvider = FutureProvider<List<String>>((ref) async {
+  try {
+    final baseUrl = ref.watch(baseUrlProvider); // Watch the base URL
+    final ollamaService = OllamaService(baseUrl: baseUrl);
+    return await ollamaService.getAvailableModels();
+  }
+  catch(e){
+    return [];
+  }
+});
