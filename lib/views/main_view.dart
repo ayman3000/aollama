@@ -1,15 +1,18 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter_riverpod/flutter_riverpod.dart';
+// import '../views/settings_view.dart';
 // import '../view_models/chat_view_model.dart';
 // import '../models/session.dart';
 // import '../view_models/providers.dart';
+// import '../widgets/appbar_title_widget.dart';
 // import '../widgets/chat_header_widget.dart';
 // import '../widgets/chat_history_widget.dart';
 // import '../widgets/message_input_widget.dart';
+// import '../widgets/rotating_image_widget.dart';
 // import '../widgets/sidebar_widget.dart';
 // import 'dart:ui';
 //
-// class MainView extends ConsumerWidget {
+// class HomeView extends ConsumerWidget {
 //   final ScrollController scrollController = ScrollController();
 //
 //   @override
@@ -21,19 +24,6 @@
 //     final viewModel = ref.read(chatViewModelProvider.notifier); // Access the ViewModel.
 //     final models = ref.watch(modelListProvider);
 //     final selectedModel = ref.watch(selectedModelProvider);
-//     final isSidebarVisible = ref.watch(isSidebarVisibleProvider); // Sidebar visibility state.
-//
-//     final mediaQueryWidth = MediaQuery.of(context).size.width;
-//     final threshold = 1300;
-//
-//     // Dynamically toggle sidebar visibility based on screen width
-//     WidgetsBinding.instance.addPostFrameCallback((_) {
-//       if (mediaQueryWidth <= threshold && isSidebarVisible) {
-//         ref.read(isSidebarVisibleProvider.notifier).state = false;
-//       } else if (mediaQueryWidth > threshold && !isSidebarVisible) {
-//         ref.read(isSidebarVisibleProvider.notifier).state = true;
-//       }
-//     });
 //
 //     // Automatically select the first model if none is selected
 //     if (models.isNotEmpty && selectedModel == null) {
@@ -51,13 +41,34 @@
 //     }
 //
 //     return Scaffold(
-//       drawer:               Expanded(
-//         child: Row(
-//           children: [
-//             // if (isSidebarVisible)
-//             SidebarWidget(
+//       appBar: AppBar(
+//         centerTitle: true,
+//         elevation: 5,
+//         backgroundColor: Colors.black87,
+//         title: const AppBarTitleWidget(),
+//         actions: [
+//           IconButton(
+//             icon: const Icon(Icons.settings),
+//             tooltip: 'Settings',
+//             onPressed: () {
+//               Navigator.push(
+//                 context,
+//                 MaterialPageRoute(
+//                   builder: (context) => SettingsView(
+//                     baseUrl: ref.watch(baseUrlProvider), // Replace with current base URL
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//       drawer: Drawer(
+//         child: SafeArea(
+//           child: SingleChildScrollView(
+//             child: SidebarWidget(
 //               sessionList: sessionList,
-//               models: models,
+//               // models: models,
 //               selectedSession: selectedSession,
 //               selectedModel: selectedModel,
 //               onModelSelected: (modelName) {
@@ -68,7 +79,10 @@
 //                   await viewModel.addNewSession(name);
 //                 } catch (e) {
 //                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(content: Text(e.toString())),
+//                     SnackBar(
+//                       content: Text(e.toString()),
+//                       backgroundColor: Colors.redAccent,
+//                     ),
 //                   );
 //                 }
 //               },
@@ -78,121 +92,106 @@
 //                 scrollToBottom();
 //               },
 //             ),
-//
-//           ],
+//           ),
 //         ),
 //       ),
-//       body: Stack(
-//         children: [
-//           Column(
-//             children: [
-//               // App Header
-//               Container(
-//                 color: Colors.black87,
-//                 padding: const EdgeInsets.all(16.0),
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     // Placeholder for Logo
-//                     Row(
-//                       children: [
-//                         Container(
-//                           width: 40, // Adjust size as needed
-//                           height: 40,
-//                           color: Colors.grey[800], // Placeholder for logo
-//                           child: const Center(
-//                             child: Text(
-//                               "Logo",
-//                               style: TextStyle(color: Colors.white),
-//                             ),
-//                           ),
-//                         ),
-//                         const SizedBox(width: 8),
-//                         // Placeholder for App Name
-//                         const Text(
-//                           "AOllama",
-//                           style: TextStyle(
-//                             color: Colors.white,
-//                             fontSize: 24,
-//                             fontWeight: FontWeight.bold,
-//                           ),
-//                         ),
-//                       ],
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Stack(
+//           children: [
+//             // Gradient Background
+//             Center(
+//               child: ConstrainedBox(
+//                 constraints:BoxConstraints(
+//                   maxWidth: MediaQuery.of(context).size.width * 0.6, )
+//                 ,
+//                 child: Container(
+//                   decoration: const BoxDecoration(
+//                     gradient: LinearGradient(
+//                       colors: [Colors.black87, Colors.black],
+//                       begin: Alignment.topCenter,
+//                       end: Alignment.bottomCenter,
 //                     ),
-//                   ],
+//                   ),
 //                 ),
 //               ),
-//               Expanded(
-//                 child: Row(
-//                   children: [
-//                     if (isSidebarVisible)
-//                       SidebarWidget(
-//                         sessionList: sessionList,
-//                         models: models,
-//                         selectedSession: selectedSession,
-//                         selectedModel: selectedModel,
-//                         onModelSelected: (modelName) {
-//                           ref.read(selectedModelProvider.notifier).state = modelName;
-//                         },
-//                         onNewSession: (name) async {
-//                           try {
-//                             await viewModel.addNewSession(name);
-//                           } catch (e) {
-//                             ScaffoldMessenger.of(context).showSnackBar(
-//                               SnackBar(content: Text(e.toString())),
-//                             );
+//             ),
+//             Column(
+//               children: [
+//                 Expanded(
+//                   child: Column(
+//                     children: [
+//                       // Chat Header
+//                       ChatHeaderWidget(selectedSession: selectedSession),
+//                       // Chat History
+//                       Expanded(
+//                         child: Container(
+//                           decoration: BoxDecoration(
+//                             color: Colors.black.withOpacity(0.9),
+//                             borderRadius: const BorderRadius.only(
+//                               topLeft: Radius.circular(12),
+//                               topRight: Radius.circular(12),
+//                             ),
+//                             boxShadow: [
+//                               BoxShadow(
+//                                 color: Colors.black.withOpacity(0.5),
+//                                 blurRadius: 8,
+//                                 offset: const Offset(0, -2),
+//                               ),
+//                             ],
+//                           ),
+//                           child: ChatHistoryWidget(
+//                             chatHistory: chatHistory,
+//                             scrollController: scrollController,
+//                             onCopyResponse: (response) {
+//                               ref.read(chatViewModelProvider.notifier).copyResponse(response).then((_) {
+//                                 ScaffoldMessenger.of(context).showSnackBar(
+//                                   const SnackBar(content: Text('Response copied!')),
+//                                 );
+//                               }).catchError((error) {
+//                                 ScaffoldMessenger.of(context).showSnackBar(
+//                                   SnackBar(content: Text('Error copying response: $error')),
+//                                 );
+//                               });
+//                             },
+//
+//                           ),
+//                         ),
+//                       ),
+//                       // Message Input
+//                       MessageInputWidget(
+//                         scrollController: scrollController,
+//                         onSendMessage: (message) async {
+//                           if (selectedSession != null) {
+//                             try {
+//                               await viewModel.sendMessage(message, selectedSession.id);
+//                               scrollToBottom();
+//                             } catch (e) {
+//                               ScaffoldMessenger.of(context).showSnackBar(
+//                                 SnackBar(
+//                                   content: Text(e.toString()),
+//                                   backgroundColor: Colors.redAccent,
+//                                 ),
+//                               );
+//                             }
 //                           }
 //                         },
-//                         onSessionSelected: (session) async {
-//                           ref.read(selectedSessionProvider.notifier).state = session;
-//                           await viewModel.loadChatHistory(session.id);
-//                           scrollToBottom();
-//                         },
 //                       ),
-//                     if (isSidebarVisible)
-//                       Container(
-//                         width: 1.0, // Border width
-//                         color: Colors.grey, // Border color
-//                       ),
-//                     Expanded(
-//                       flex: isSidebarVisible ? 5 : 1, // Adjust flex based on sidebar visibility
-//                       child: Column(
-//                         children: [
-//                           ChatHeaderWidget(selectedSession: selectedSession),
-//                           Expanded(
-//                             child: ChatHistoryWidget(
-//                               chatHistory: chatHistory,
-//                               scrollController: scrollController,
-//                             ),
-//                           ),
-//                           MessageInputWidget(
-//                             scrollController: scrollController,
-//                             onSendMessage: (message) async {
-//                               if (selectedSession != null) {
-//                                 try {
-//                                   await viewModel.sendMessage(message, selectedSession.id);
-//                                   scrollToBottom();
-//                                 } catch (e) {
-//                                   ScaffoldMessenger.of(context).showSnackBar(
-//                                     SnackBar(content: Text(e.toString())),
-//                                   );
-//                                 }
-//                               }
-//                             },
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ],
+//                     ],
+//                   ),
+//                 ),
+//               ],
+//             ),
+//             // Loading Indicator
+//             if (isLoading)
+//               const Center(
+//                 child: RotatingImageWidget(
+//                   imagePath: 'assets/logo.png',
+//                   size: 80.0,
 //                 ),
 //               ),
-//             ],
-//           ),
-//           if (isLoading)
-//             const Center(
-//               child: CircularProgressIndicator(),
-//             ),
-//         ],
+//           ],
+//         ),
 //       ),
 //     );
 //   }
@@ -202,7 +201,7 @@
 //       if (scrollController.hasClients) {
 //         scrollController.animateTo(
 //           scrollController.position.maxScrollExtent,
-//           duration: const Duration(milliseconds: 300),
+//           duration: const Duration(milliseconds: 200),
 //           curve: Curves.easeOut,
 //         );
 //       }

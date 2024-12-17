@@ -61,13 +61,14 @@ class ModelsWidget extends ConsumerWidget {
                 return DropdownButton<String>(
                   isExpanded: true,
                   dropdownColor: Colors.grey[800],
-                  value: selectedModel,
+                  value: models.contains(selectedModel) ? selectedModel : null, // Validate selectedModel
                   onChanged: (value) {
                     if (value != null) {
                       onModelSelected(value);
                     }
                   },
-                  items: models.map((model) {
+                  items: models.isNotEmpty
+                      ? models.map((model) {
                     return DropdownMenuItem(
                       value: model,
                       child: Text(
@@ -75,8 +76,10 @@ class ModelsWidget extends ConsumerWidget {
                         style: const TextStyle(color: Colors.white),
                       ),
                     );
-                  }).toList(),
+                  }).toList()
+                      : null, // Handle empty items
                 );
+
               }
               },
               loading: () => const Center(

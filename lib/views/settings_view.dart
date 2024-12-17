@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ollama_service.dart';
-import '../view_models/providers.dart'; // Import the service provider
+import '../view_models/providers.dart';
 
 class SettingsView extends ConsumerWidget {
   final TextEditingController _baseUrlController = TextEditingController();
@@ -16,55 +16,101 @@ class SettingsView extends ConsumerWidget {
       appBar: AppBar(
         title: const Text("Settings"),
         centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.black87,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              "Base URL",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _baseUrlController,
-              decoration: InputDecoration(
-                hintText: "Enter Base URL",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
+      backgroundColor: Colors.black,
+      body: Center(
+        child: Card(
+          margin: const EdgeInsets.symmetric(horizontal: 20),
+          color: Colors.grey[900],
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 8,
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Center(
+                  child: Text(
+                    "Update Base URL",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Base URL",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white70,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                TextField(
+                  controller: _baseUrlController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                    hintText: "Enter Base URL",
+                    hintStyle: const TextStyle(color: Colors.white60),
+                    filled: true,
+                    fillColor: Colors.grey[800],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Center(
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      final newUrl = _baseUrlController.text.trim();
+                      if (newUrl.isNotEmpty) {
+                        ref.read(baseUrlProvider.notifier).state = newUrl;
+                        ref.invalidate(modelsProvider);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Base URL updated!'),
+                            backgroundColor: Colors.grey,
+                          ),
+                        );
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Base URL cannot be empty!'),
+                            backgroundColor: Colors.redAccent,
+                          ),
+                        );
+                      }
+                    },
+                    icon: const Icon(Icons.save, size: 18),
+                    label: const Text(
+                      "Save Changes",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueAccent,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 12),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                final newUrl = _baseUrlController.text.trim();
-                if (newUrl.isNotEmpty) {
-                  ref.read(baseUrlProvider.notifier).state = newUrl;
-                  ref.invalidate(modelsProvider); // Trigger models re-fetch
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Base URL updated!')),
-                  );
-                    Navigator.pop(context); // Go back to the previous screen
-
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Base URL cannot be empty!')),
-                  );
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     const SnackBar(content: Text("Base URL updated successfully!")),
-                //   );
-                //   Navigator.pop(context); // Go back to the previous screen
-                // } else {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     const SnackBar(content: Text("Base URL cannot be empty.")),
-                //   );
-                }
-              },
-              child: const Text("Save"),
-            ),
-          ],
+          ),
         ),
       ),
     );
