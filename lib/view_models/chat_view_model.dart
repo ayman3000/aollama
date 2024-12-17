@@ -77,13 +77,19 @@ class ChatViewModel extends StateNotifier<bool> {
     final startTime = DateTime.now();
 
     try {
-      final response = await ollamaService.generateResponse(selectedModel, message);
+
+      List<Map<String, String>> messages= [
+        {'role':'user', 'content':message}
+      ];
+      final response = await ollamaService.chatResponse(selectedModel, messages);
+
+      // final response = await ollamaService.generateResponse(selectedModel, message);
       final endTime = DateTime.now();
       final responseTime = endTime.difference(startTime).inMilliseconds / 1000.0;
 
       final newMessage = Conversation(
         userInput: message,
-        botResponse: response['response'],
+        botResponse: response['message']['content'],
         modelName: selectedModel,
         timestamp: DateTime.now(),
         responseTime: responseTime,
@@ -94,7 +100,7 @@ class ChatViewModel extends StateNotifier<bool> {
         'session_id': sessionId,
         'model_name': selectedModel,
         'user_input': message,
-        'bot_response': response['response'],
+        'bot_response': response['message']['content'],
         'response_time': responseTime,
         'timestamp': DateTime.now().toIso8601String(),
       });

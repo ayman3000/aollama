@@ -29,6 +29,28 @@ class OllamaService {
     }
     throw Exception('Failed to generate response');
   }
+
+  Future<Map<String, dynamic>> chatResponse(
+      String modelName, List<Map<String, String>> messages) async {
+    final url = Uri.parse('$baseUrl/api/chat');
+    final body = json.encode({
+      'model': modelName,
+      'messages': messages,
+      'stream': false, // Disable streaming for a single response
+    });
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    }
+    throw Exception('Failed to generate chat response');
+  }
+
 }
 
 final ollamaServiceProvider = Provider<OllamaService>((ref) {
