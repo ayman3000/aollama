@@ -5,7 +5,6 @@ import 'models_widget.dart'; // Import ModelsWidget
 class SidebarWidget extends StatelessWidget {
   final List<Session> sessionList;
   final Session? selectedSession;
-  // final List<String> models;
   final String? selectedModel;
   final Function(String) onModelSelected;
   final Function(String) onNewSession;
@@ -14,7 +13,6 @@ class SidebarWidget extends StatelessWidget {
   const SidebarWidget({
     required this.sessionList,
     required this.selectedSession,
-    // required this.models,
     required this.selectedModel,
     required this.onModelSelected,
     required this.onNewSession,
@@ -24,23 +22,35 @@ class SidebarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TextEditingController for the input field
     final TextEditingController sessionController = TextEditingController();
+    final ScrollController scrollController = ScrollController();
 
     return Container(
-      color: Colors.black87,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.blueGrey.shade900, Colors.black],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Adjust to shrink-wrap its children
         children: [
           // Models Dropdown Section
-
           const SizedBox(height: 10),
           SizedBox(
             width: double.infinity,
             height: 100,
             child: ModelsWidget(
-              // models: models,
               selectedModel: selectedModel,
               onModelSelected: onModelSelected,
             ),
@@ -74,7 +84,7 @@ class SidebarWidget extends StatelessWidget {
                   onSubmitted: (name) {
                     if (name.trim().isNotEmpty) {
                       onNewSession(name.trim());
-                      sessionController.clear(); // Clear the input field
+                      sessionController.clear();
                     }
                   },
                 ),
@@ -85,10 +95,9 @@ class SidebarWidget extends StatelessWidget {
                 onPressed: () {
                   final name = sessionController.text.trim();
                   if (name.isNotEmpty) {
-                    onNewSession(name); // Call the callback function
-                    sessionController.clear(); // Clear the input field
+                    onNewSession(name);
+                    sessionController.clear();
                   } else {
-                    // Optionally, show an error/snackbar for empty input
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Session name cannot be empty'),
@@ -110,51 +119,54 @@ class SidebarWidget extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          // const SizedBox(height: 10),
-          const Divider(color: Colors.white,),
-          Container(
-            height:  MediaQuery.of(context).size.height * 0.69,
-            decoration: BoxDecoration(
-              // border: Border.all(color: Colors.grey[700]!),
-              borderRadius: BorderRadius.circular(2),
-            ),
-            child: ListView.builder(
-              itemCount: sessionList.length,
-              itemBuilder: (context, index) {
-                final session = sessionList[index];
+          const Divider(color: Colors.white),
 
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 4),
-                  decoration: BoxDecoration(
-                    color: session == selectedSession
-                        ? Colors.grey[800]
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(4), // Rectangle with slight rounding
-                    border: session == selectedSession
-                        ? Border.all(
-                      // color: Colors.redAccent,
-                      width: 1,
-                    )
-                        : null,
-                  ),
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                      foregroundColor: Colors.white,
-                    ),
-                    onPressed: () {
-                      onSessionSelected(session);
-                    },
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        session.name,
-                        style: const TextStyle(color: Colors.white),
+          // Constrained Session List
+          Flexible(
+            fit: FlexFit.loose, // Allow flexibility without forcing full expansion
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.grey[900]?.withOpacity(0.9),
+              ),
+              child: Scrollbar(
+                controller: scrollController,
+                thumbVisibility: true,
+                child: ListView.builder(
+                  controller: scrollController,
+                  shrinkWrap: true,
+                  itemCount: sessionList.length,
+                  itemBuilder: (context, index) {
+                    final session = sessionList[index];
+                    return Container(
+                      margin: const EdgeInsets.symmetric(vertical: 4),
+                      decoration: BoxDecoration(
+                        color: session == selectedSession
+                            ? Colors.blueGrey
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(4),
                       ),
-                    ),
-                  ),
-                );
-              },
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 8),
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          onSessionSelected(session);
+                        },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            session.name,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ],

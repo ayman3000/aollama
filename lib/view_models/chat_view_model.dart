@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/session.dart';
@@ -106,7 +107,17 @@ class ChatViewModel extends StateNotifier<bool> {
       state = false; // Set `isLoading` to false.
     }
   }
+
+  Future<void> copyResponse(String response) async {
+    try {
+      await Clipboard.setData(ClipboardData(text: response));
+    } catch (error) {
+      throw Exception('Failed to copy response: $error');
+    }
+  }
 }
+
+
 
 final chatViewModelProvider = StateNotifierProvider<ChatViewModel, bool>((ref) {
   return ChatViewModel(ref.read);

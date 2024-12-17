@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ollama_client/views/settings_view.dart';
+import '../views/settings_view.dart';
 import '../view_models/chat_view_model.dart';
 import '../models/session.dart';
 import '../view_models/providers.dart';
@@ -143,6 +143,18 @@ class HomeView extends ConsumerWidget {
                           child: ChatHistoryWidget(
                             chatHistory: chatHistory,
                             scrollController: scrollController,
+                            onCopyResponse: (response) {
+                              ref.read(chatViewModelProvider.notifier).copyResponse(response).then((_) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Response copied!')),
+                                );
+                              }).catchError((error) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Error copying response: $error')),
+                                );
+                              });
+                            },
+
                           ),
                         ),
                       ),

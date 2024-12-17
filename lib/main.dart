@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:ollama_client/views/home_view.dart';
+import './views/home_view.dart';
 import 'views/main_view.dart';
 
 void main() {

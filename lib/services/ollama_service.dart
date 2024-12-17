@@ -7,7 +7,7 @@ import '../view_models/providers.dart';
 class OllamaService {
   final String baseUrl;
 
-  OllamaService({this.baseUrl = 'http://localhost:11434'});
+  OllamaService({this.baseUrl = 'http://192.168.1.4:11434'});
 
   Future<List<String>> getAvailableModels() async {
     final url = Uri.parse('$baseUrl/api/tags');

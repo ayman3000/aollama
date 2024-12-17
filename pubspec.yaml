@@ -1,4 +1,4 @@
-name: ollama_client
+name: aollama
 description: A Flutter desktop application for managing Ollama client API interactions.
 version: 1.0.0+1
 publish_to: "none" # Prevent accidental publication to pub.dev

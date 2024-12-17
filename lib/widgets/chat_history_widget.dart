@@ -1,19 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../models/session.dart';
 
 class ChatHistoryWidget extends StatelessWidget {
   final List<Conversation> chatHistory;
   final ScrollController scrollController;
-  // final Function(String) onReusePrompt; // Callback to reuse prompt
+  final Function(String) onCopyResponse;
 
   const ChatHistoryWidget({
     required this.chatHistory,
     required this.scrollController,
-    // required this.onReusePrompt,
-    super.key,
-  });
+    required this.onCopyResponse,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,45 +39,44 @@ class ChatHistoryWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.8, // Limit width to 60% of screen
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.6, // Adjust the width dynamically
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(2, 2),
+                          ),
+                        ],
                       ),
-                      child: Stack(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.blue,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 4,
-                                  offset: Offset(2, 2),
-                                ),
-                              ],
-                            ),
-                            child: Text(
-                              conversation.userInput,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
+                          Text(
+                            'User:',
+                            style: const TextStyle(
+                              color: Colors.white70,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
                             ),
                           ),
-                          Positioned(
-                            top: 5,
-                            right: 5,
-                            child: IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.white, size: 10),
-                              onPressed: () {
-                                // onReusePrompt(conversation.userInput); // Pass the prompt to the text field
-                              },
+                          const SizedBox(height: 5),
+                          Text(
+                            conversation.userInput,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
                             ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 4, // Limit to 4 lines
                           ),
                         ],
                       ),
@@ -101,47 +98,57 @@ class ChatHistoryWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: MediaQuery.of(context).size.width * 0.8, // Limit width to 80% of screen
-                      ),
-                      child: Container(
-                        margin: const EdgeInsets.symmetric(vertical: 5),
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[800],
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 4,
-                              offset: Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: '${conversation.modelName}: ',
-                                style: const TextStyle(
-                                  color: Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              TextSpan(
-                                text: conversation.botResponse,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ],
+                  ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.8, // Adjust the width dynamically
+                    ),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[800],
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(2, 2),
                           ),
-                        ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: '${conversation.modelName}: ',
+                                    style: const TextStyle(
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  TextSpan(
+                                    text: conversation.botResponse,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.copy, color: Colors.white),
+                            tooltip: 'Copy Response',
+                            onPressed: () {
+                              onCopyResponse(conversation.botResponse);
+                            },
+                          ),
+                        ],
                       ),
                     ),
                   ),
