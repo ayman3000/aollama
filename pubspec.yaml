@@ -22,6 +22,12 @@ dev_dependencies:
     sdk: flutter
   lint: ^2.0.0
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 flutter:
   uses-material-design: true
@@ -29,6 +35,7 @@ flutter:
 # Assets (if you need to include assets like icons or configuration files)
   assets:
     - assets/logo.png
+    - assets/icon/icon.png
 
 # Fonts (optional: define custom fonts here)
 fonts:

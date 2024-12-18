@@ -61,7 +61,7 @@ class ModelsWidget extends ConsumerWidget {
                 return DropdownButton<String>(
                   isExpanded: true,
                   dropdownColor: Colors.grey[800],
-                  value: models.contains(selectedModel) ? selectedModel : null, // Validate selectedModel
+                  value: models.contains(selectedModel) ? selectedModel : models[0], // Validate selectedModel
                   onChanged: (value) {
                     if (value != null) {
                       onModelSelected(value);
