@@ -1,9 +1,16 @@
+import 'package:aollama/services/database_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
 import './views/home_view.dart';
 import 'views/main_view.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  final databaseService = DatabaseService();
+  await databaseService.initializeDatabase();
   runApp(ProviderScope(child: MyApp()));
 }
 

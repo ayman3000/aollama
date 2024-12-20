@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../views/settings_view.dart';
 import '../view_models/chat_view_model.dart';
-// import '../models/session.dart';
 import '../view_models/providers.dart';
 import '../widgets/appbar_title_widget.dart';
 import '../widgets/chat_header_widget.dart';
@@ -31,14 +30,6 @@ class HomeView extends ConsumerWidget {
       });
     }
 
-    // Automatically select the first session if none is selected
-    if (sessionList.isNotEmpty && selectedSession == null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(selectedSessionProvider.notifier).state = sessionList.first;
-        ref.read(chatViewModelProvider.notifier).loadChatHistory(sessionList.first.id);
-      });
-    }
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -62,12 +53,12 @@ class HomeView extends ConsumerWidget {
           ),
         ],
       ),
-      drawer: MediaQuery.of(context).size.width < 800 ? Drawer(
+      drawer: MediaQuery.of(context).size.width < 800
+          ? Drawer(
         child: SafeArea(
           child: SingleChildScrollView(
             child: SidebarWidget(
               sessionList: sessionList,
-              // models: models,
               selectedSession: selectedSession,
               selectedModel: selectedModel,
               onModelSelected: (modelName) {
@@ -76,6 +67,7 @@ class HomeView extends ConsumerWidget {
               onNewSession: (name) async {
                 try {
                   await viewModel.addNewSession(name);
+
                 } catch (e) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -93,10 +85,10 @@ class HomeView extends ConsumerWidget {
             ),
           ),
         ),
-      ):null,
+      )
+          : null,
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Threshold for showing the sidebar
           const double sidebarThreshold = 800;
           final bool isWideScreen = constraints.maxWidth >= sidebarThreshold;
 
@@ -105,7 +97,7 @@ class HomeView extends ConsumerWidget {
               // Sidebar for Wide Screens
               if (isWideScreen)
                 SizedBox(
-                  width: 270, // Fixed width for sidebar
+                  width: 270,
                   child: SidebarWidget(
                     sessionList: sessionList,
                     selectedSession: selectedSession,
@@ -134,79 +126,105 @@ class HomeView extends ConsumerWidget {
                 ),
 
               // Main Content
+// Main Content
               Expanded(
                 child: Center(
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: 1200, // Set maximum width for the chat history content
+                      maxWidth: 1200,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(10.0),
                       child: Stack(
                         children: [
-                          Column(
-                            children: [
-                              // Chat Header
-                              ChatHeaderWidget(selectedSession: selectedSession),
-
-                              // Chat History
-                              Expanded(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.black.withOpacity(0.9),
-                                    borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.5),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, -2),
-                                      ),
-                                    ],
+                          if (selectedSession == null) ...[
+                            // Placeholder UI when no session or chat messages
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.chat_bubble_outline,
+                                    size: 80,
+                                    color: Colors.grey[700],
                                   ),
-                                  child: ChatHistoryWidget(
-                                    chatHistory: chatHistory,
-                                    scrollController: scrollController,
-                                    onCopyResponse: (response) {
-                                      ref.read(chatViewModelProvider.notifier).copyResponse(response).then((_) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Response copied!')),
-                                        );
-                                      }).catchError((error) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text('Error copying response: $error')),
-                                        );
-                                      });
-                                    },
-
+                                  const SizedBox(height: 16),
+                                  Text(
+                                    selectedSession == null
+                                        ? 'Welcome to AOllama Chat!'
+                                        : 'No messages yet in this session.',
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      color: Colors.grey[400],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    selectedSession == null
+                                        ? 'Start by selecting or creating a session from the sidebar.'
+                                        : 'Send your first message below!',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey[500],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ] else ...[
+                            // Main Chat UI
+                            Column(
+                              children: [
+                                ChatHeaderWidget(selectedSession: selectedSession),
+                                Expanded(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.9),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(12),
+                                        topRight: Radius.circular(12),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.5),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, -2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: ChatHistoryWidget(
+                                      chatHistory: chatHistory,
+                                      scrollController: scrollController,
+                                      onCopyResponse: (response) {
+                                        ref.read(chatViewModelProvider.notifier).copyResponse(response);
+                                      },
+                                    ),
                                   ),
                                 ),
-                              ),
-
-                              // Message Input
-                              MessageInputWidget(
-                                scrollController: scrollController,
-                                onSendMessage: (message) async {
-                                  if (selectedSession != null) {
-                                    try {
-                                      await viewModel.sendMessage(message, selectedSession.id);
-                                      scrollToBottom();
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(e.toString()),
-                                          backgroundColor: Colors.redAccent,
-                                        ),
-                                      );
+                                MessageInputWidget(
+                                  scrollController: scrollController,
+                                  onSendMessage: (message) async {
+                                    if (selectedSession != null) {
+                                      try {
+                                        await viewModel.sendMessage(message, selectedSession.id);
+                                        scrollToBottom();
+                                      } catch (e) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text(e.toString()),
+                                            backgroundColor: Colors.redAccent,
+                                          ),
+                                        );
+                                      }
                                     }
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                          // Loading Indicator
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
                           if (isLoading)
                             const Center(
                               child: RotatingImageWidget(
@@ -220,6 +238,7 @@ class HomeView extends ConsumerWidget {
                   ),
                 ),
               ),
+
             ],
           );
         },

@@ -1,8 +1,9 @@
+import 'package:aollama/models/message.dart';
 import 'package:flutter/material.dart';
 import '../models/session.dart';
 
 class ChatHistoryWidget extends StatelessWidget {
-  final List<Conversation> chatHistory;
+  final List<Message> chatHistory;
   final ScrollController scrollController;
   final Function(String) onCopyResponse;
 

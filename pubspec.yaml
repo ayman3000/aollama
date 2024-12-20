@@ -12,10 +12,12 @@ dependencies:
 
   flutter_riverpod: ^2.0.2 # State management
   http: ^1.0.0 # For API requests
-  sqflite: ^2.2.0 # SQLite database
+#  sqflite: ^2.2.0 # SQLite database
   path: ^1.8.3 # For handling file paths
   provider: ^6.0.0 # Dependency injection
   intl: ^0.20.0 # For formatting dates and times
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,132 +1,160 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/adapters.dart';
+import '../models/message.dart';
 import '../models/session.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
-
+import '../models/session.dart';
 import '../view_models/providers.dart';
 
 class DatabaseService {
-  Future<Database> initializeDatabase() async {
-    final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'chat_history.db');
+  static const String sessionsBoxName = 'sessionsBox';
+  static const String messagesBoxName = 'messagesBox';
 
-    return openDatabase(
-      path,
-      onCreate: (db, version) {
-        db.execute('''
-          CREATE TABLE session (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT UNIQUE,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-          )
-        ''');
-        db.execute('''
-          CREATE TABLE conversations (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            session_id INTEGER,
-            model_name TEXT,
-            user_input TEXT,
-            bot_response TEXT,
-            timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            response_time REAL,
-            FOREIGN KEY (session_id) REFERENCES session(id)
-          )
-        ''');
-      },
-      version: 1,
-    );
+  // Initialize Hive and open necessary boxes
+  Future<void> initializeDatabase() async {
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(SessionAdapter());
+    }
+    if (!Hive.isAdapterRegistered(1)) {
+      Hive.registerAdapter(MessageAdapter());
+    }
+
+    // await resetDatabase();
+
+    try {
+      await Hive.openBox<Session>(DatabaseService.sessionsBoxName);
+      await Hive.openBox<Message>(DatabaseService.messagesBoxName);
+      print('Hive boxes opened successfully');
+    } catch (e) {
+      print('Error opening Hive boxes: $e');
+      // Optionally reset boxes here if corruption is detected
+    }
   }
+
 
   // Create a new session
   Future<int?> createSession(String name) async {
-    final db = await initializeDatabase();
-    try {
-      // Insert the new session into the database
-      final id = await db.insert('session', {'name': name});
-      return id; // Return the session ID if successful
-    } catch (e) {
-      // Handle duplicate session names or other errors
-      print('Error creating session: $e');
-      return null; // Return null if there's an error
+    final sessionsBox = Hive.box<Session>(sessionsBoxName);
+
+    // Check for duplicate session names
+    if (sessionsBox.values.any((session) => session.name == name)) {
+      print('Error: Duplicate session name');
+      return null;
     }
+
+    final newSession = Session(
+      id: sessionsBox.length,
+      name: name,
+      timestamp: DateTime.now(),
+    );
+
+    await sessionsBox.put(newSession.id, newSession);
+    return newSession.id;
   }
 
+  // Load all sessions
   Future<List<Session>> loadSessions() async {
-    final db = await initializeDatabase();
-    final maps = await db.query('session', orderBy: 'timestamp DESC');
+    final sessionsBox = Hive.box<Session>(sessionsBoxName);
 
-    // Ensure every map is correctly parsed
-    final sessions = maps.map((map) {
-      try {
-        return Session.fromMap(map);
-      } catch (e) {
-        print('Error parsing session: $e');
-        return null; // Handle gracefully
-      }
-    }).whereType<Session>().toList();
-
-    return sessions;
+    return sessionsBox.values.toList()
+      ..sort((a, b) {
+        final aTimestamp = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0); // Fallback to epoch
+        final bTimestamp = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0); // Fallback to epoch
+        return bTimestamp.compareTo(aTimestamp); // Sort descending
+      });
   }
 
+  // Save a message
+  Future<void> saveMessage(int sessionId, Message message) async {
+    final messagesBox = Hive.box<Message>(messagesBoxName);
 
-  Future<List<Map<String, dynamic>>> loadSessions2() async {
-    final db = await initializeDatabase();
-    final result = await db.query('session', orderBy: 'timestamp DESC');
-
-    // Optionally remove the `timestamp` field if not needed
-    return result.map((map) {
-      map.remove('timestamp'); // Remove timestamp if necessary
-      return map;
-    }).toList();
+    await messagesBox.add(
+      Message(
+        sessionId: sessionId,
+        userInput: message.userInput,
+        botResponse: message.botResponse,
+        modelName: message.modelName,
+        timestamp: message.timestamp ?? DateTime.now(),
+        responseTime: message.responseTime ?? 0.0,
+      ),
+    );
   }
 
+  // Load message history for a specific session
+  Future<List<Message>> loadMessageHistory(int sessionId) async {
+    final messagesBox = Hive.box<Message>(messagesBoxName);
 
-  Future<void> saveConversation(Map<String, dynamic> conversation) async {
-    final db = await initializeDatabase();
-    int result = await db.insert('conversations', conversation);
-    print("result={result}");
+    return messagesBox.values
+        .where((message) => message.sessionId == sessionId)
+        .toList()
+      ..sort((a, b) => a.timestamp?.compareTo(b.timestamp ?? DateTime.now()) ?? 0);
   }
 
-  // Future<List<Conversation>> loadConversationHistory(int sessionId) async {
-  //   final db = await initializeDatabase();
-  //   final result = db.query(
-  //     'conversations',
-  //     where: 'session_id = ?',
-  //     whereArgs: [sessionId],
-  //     orderBy: 'timestamp ASC',
-  //   );
-  //
-  //   return result;
-  // }
-
-  Future<List<Conversation>> loadConversationHistory(int sessionId) async {
-    try {
-      final db = await initializeDatabase();
-      final result = await db.query(
-        'conversations',
-        where: 'session_id = ?',
-        whereArgs: [sessionId],
-      );
-
-      // Ensure the result is mapped correctly
-      return result.map<Conversation>((row) {
-        return Conversation(
-          userInput: row['user_input']?.toString() ?? '',
-          botResponse: row['bot_response']?.toString() ?? '',
-          modelName: row['model_name']?.toString() ?? '',
-          timestamp: DateTime.tryParse(row['timestamp']?.toString() ?? '') ??
-              DateTime.now(),
-          responseTime: (row['response_time'] as num?)?.toDouble() ?? 0.0,
-        );
-      }).toList();
-    } catch (error) {
-      print('Error loading chat history: $error');
-      // Return an empty list in case of an error
-      return <Conversation>[];
-    }
+  Future<void> resetDatabase() async {
+    await Hive.deleteBoxFromDisk(DatabaseService.sessionsBoxName);
+    await Hive.deleteBoxFromDisk(DatabaseService.messagesBoxName);
   }
+
 }
 
 final databaseServiceProvider = Provider<DatabaseService>((ref) {
   return DatabaseService();
 });
+
+class SessionAdapter extends TypeAdapter<Session> {
+  @override
+  final int typeId = 0;
+
+  @override
+  Session read(BinaryReader reader) {
+    return Session(
+      id: reader.readInt(),
+      name: reader.readString(),
+      timestamp: reader.read() as DateTime?, // Read DateTime directly
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Session obj) {
+    writer.writeInt(obj.id);
+    writer.writeString(obj.name);
+    writer.write(obj.timestamp); // Write DateTime directly
+  }
+}
+
+
+  @override
+  void write(BinaryWriter writer, Session obj) {
+    writer.writeInt(obj.id);
+    writer.writeString(obj.name);
+    writer.writeString(obj.timestamp?.toIso8601String() ?? ''); // Write empty string if null
+  }
+
+
+// Hive adapter for the Message class
+class MessageAdapter extends TypeAdapter<Message> {
+  @override
+  final int typeId = 1;
+
+  @override
+  Message read(BinaryReader reader) {
+    return Message(
+      sessionId: reader.readInt(),
+      userInput: reader.readString(),
+      botResponse: reader.readString(),
+      modelName: reader.readString(),
+      timestamp: reader.read() as DateTime?, // Read DateTime directly
+      responseTime: reader.readDouble(),
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, Message obj) {
+    writer.writeInt(obj.sessionId);
+    writer.writeString(obj.userInput);
+    writer.writeString(obj.botResponse);
+    writer.writeString(obj.modelName);
+    writer.write(obj.timestamp); // Write DateTime directly
+    writer.writeDouble(obj.responseTime ?? 0.0);
+  }
+}

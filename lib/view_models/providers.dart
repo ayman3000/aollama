@@ -1,3 +1,4 @@
+import 'package:aollama/models/message.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/session.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,16 +13,16 @@ final isSidebarVisibleProvider = StateProvider<bool>((ref) => true);
 final baseUrlProvider = StateProvider<String>((ref) => 'http://localhost:11434');
 
 
-class ChatHistoryNotifier extends StateNotifier<List<Conversation>> {
+class ChatHistoryNotifier extends StateNotifier<List<Message>> {
    ChatHistoryNotifier() : super([]);
 
   // Load chat history for a specific session
-  void loadHistory(List<Conversation> history) {
+  void loadHistory(List<Message> history) {
     state = history; // Set the state with the loaded history
   }
 
   // Add a new conversation to the chat history
-  void addConversation(Conversation conversation) {
+  void addConversation(Message conversation) {
     state = [...state, conversation]; // Append the new conversation to the history
   }
 
@@ -31,7 +32,7 @@ class ChatHistoryNotifier extends StateNotifier<List<Conversation>> {
   }
 }
 
-final chatHistoryProvider = StateNotifierProvider<ChatHistoryNotifier, List<Conversation>>(
+final chatHistoryProvider = StateNotifierProvider<ChatHistoryNotifier, List<Message>>(
       (ref) => ChatHistoryNotifier(),
 );
 

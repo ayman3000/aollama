@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../models/message.dart';
 import '../models/session.dart';
 import '../services/database_service.dart';
 import '../services/ollama_service.dart';
@@ -17,6 +18,7 @@ class ChatViewModel extends StateNotifier<bool> {
     final databaseService = _read(databaseServiceProvider);
     final sessionListNotifier = _read(sessionListProvider.notifier);
     final selectedSessionNotifier = _read(selectedSessionProvider.notifier);
+    final chatViewModelNotifier = _read(chatViewModelProvider.notifier);
 
     final sessionId = await databaseService.createSession(name);
     if (sessionId != null) {
@@ -32,6 +34,8 @@ class ChatViewModel extends StateNotifier<bool> {
         print(e.toString());
       }
       selectedSessionNotifier.state = newSession;
+      await loadChatHistory(newSession.id);
+
     } else {
       throw Exception('Session name already exists!');
     }
@@ -42,7 +46,7 @@ class ChatViewModel extends StateNotifier<bool> {
     final chatHistoryNotifier = _read(chatHistoryProvider.notifier);
 
     try {
-      final history = await databaseService.loadConversationHistory(sessionId);
+      final history = await databaseService.loadMessageHistory(sessionId);
       if (history.isNotEmpty) {
         // final conversations = history.map((e) {
         //   return Conversation(
@@ -87,7 +91,8 @@ class ChatViewModel extends StateNotifier<bool> {
       final endTime = DateTime.now();
       final responseTime = endTime.difference(startTime).inMilliseconds / 1000.0;
 
-      final newMessage = Conversation(
+      final newMessage = Message(
+        sessionId : sessionId ,
         userInput: message,
         botResponse: response['message']['content'],
         modelName: selectedModel,
