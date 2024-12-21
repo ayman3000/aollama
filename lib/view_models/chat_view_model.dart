@@ -23,6 +23,7 @@ class ChatViewModel extends StateNotifier<bool> {
     final sessionId = await databaseService.createSession(name);
     if (sessionId != null) {
       final newSession = Session(id: sessionId, name: name, timestamp: DateTime.timestamp());
+      // await databaseService.updateLastActivityDate(sessionId);
 
       try {
         sessionListNotifier.state = [newSession,
@@ -48,15 +49,6 @@ class ChatViewModel extends StateNotifier<bool> {
     try {
       final history = await databaseService.loadMessageHistory(sessionId);
       if (history.isNotEmpty) {
-        // final conversations = history.map((e) {
-        //   return Conversation(
-        //     userInput: e['user_input'],
-        //     botResponse: e['bot_response'],
-        //     modelName: e['model_name'],
-        //     timestamp: DateTime.parse(e['timestamp']),
-        //     responseTime: e['response_time'],
-        //   );
-        // }).toList();
         chatHistoryNotifier.loadHistory(history);
 
       } else {
@@ -72,6 +64,8 @@ class ChatViewModel extends StateNotifier<bool> {
     final databaseService = _read(databaseServiceProvider);
     final chatHistoryNotifier = _read(chatHistoryProvider.notifier);
     final selectedModel = _read(selectedModelProvider);
+    final sessionListNotifier = _read(sessionListProvider.notifier);
+    final selectedSessionNotifier = _read(selectedSessionProvider.notifier); // To update selected session
 
     if (selectedModel == null || message.trim().isEmpty) {
       throw Exception('Please select a model and enter a message!');
@@ -101,7 +95,7 @@ class ChatViewModel extends StateNotifier<bool> {
       );
 
       // Save conversation in the database
-      await databaseService.saveConversation({
+      await databaseService.saveMessage({
         'session_id': sessionId,
         'model_name': selectedModel,
         'user_input': message,
@@ -110,8 +104,18 @@ class ChatViewModel extends StateNotifier<bool> {
         'timestamp': DateTime.now().toIso8601String(),
       });
 
+
       // Add new message to chat history
-      chatHistoryNotifier.addConversation(newMessage);
+      chatHistoryNotifier.addMessage(newMessage);
+      // Refresh the session list
+      final updatedSessions = await databaseService.loadSessions();
+      sessionListNotifier.state = updatedSessions; // Update the session list
+      // Update the selected session to the first one
+      if (updatedSessions.isNotEmpty) {
+        selectedSessionNotifier.state = updatedSessions.first;
+        // await loadChatHistory(updatedSessions.first.id); // Load chat history for the first session
+      }
+
     } catch (error) {
       throw Exception('Failed to send message: $error');
     } finally {

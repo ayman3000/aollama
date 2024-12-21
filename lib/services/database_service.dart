@@ -19,7 +19,7 @@ class DatabaseService {
       Hive.registerAdapter(MessageAdapter());
     }
 
-    // await resetDatabase();
+    await resetDatabase();
 
     try {
       await Hive.openBox<Session>(DatabaseService.sessionsBoxName);
@@ -46,11 +46,13 @@ class DatabaseService {
       id: sessionsBox.length,
       name: name,
       timestamp: DateTime.now(),
+      lastActivityDate: DateTime.now(), // Initialize lastActivityDate
     );
 
     await sessionsBox.put(newSession.id, newSession);
     return newSession.id;
   }
+
 
   // Load all sessions
   Future<List<Session>> loadSessions() async {
@@ -58,27 +60,48 @@ class DatabaseService {
 
     return sessionsBox.values.toList()
       ..sort((a, b) {
-        final aTimestamp = a.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0); // Fallback to epoch
-        final bTimestamp = b.timestamp ?? DateTime.fromMillisecondsSinceEpoch(0); // Fallback to epoch
-        return bTimestamp.compareTo(aTimestamp); // Sort descending
+        final aLastActivity = a.lastActivityDate ?? DateTime.fromMillisecondsSinceEpoch(0); // Fallback to epoch
+        final bLastActivity = b.lastActivityDate ?? DateTime.fromMillisecondsSinceEpoch(0); // Fallback to epoch
+        return bLastActivity.compareTo(aLastActivity); // Sort descending by lastActivityDate
       });
   }
+  Future<void> updateLastActivityDate(int sessionId) async {
+    final sessionsBox = Hive.box<Session>(sessionsBoxName);
+    final session = sessionsBox.get(sessionId);
+
+    if (session != null) {
+      final updatedSession = Session(
+        id: session.id,
+        name: session.name,
+        timestamp: session.timestamp,
+        lastActivityDate: DateTime.now(), // Update to current time
+      );
+
+      await sessionsBox.put(sessionId, updatedSession);
+    }
+  }
+
+
 
   // Save a message
-  Future<void> saveMessage(int sessionId, Message message) async {
+  Future<void> saveMessage(Map<String, dynamic> messageData) async {
     final messagesBox = Hive.box<Message>(messagesBoxName);
 
     await messagesBox.add(
       Message(
-        sessionId: sessionId,
-        userInput: message.userInput,
-        botResponse: message.botResponse,
-        modelName: message.modelName,
-        timestamp: message.timestamp ?? DateTime.now(),
-        responseTime: message.responseTime ?? 0.0,
+        sessionId: messageData['session_id'] as int,
+        userInput: messageData['user_input'] as String,
+        botResponse: messageData['bot_response'] as String,
+        modelName: messageData['model_name'] as String,
+        timestamp: DateTime.parse(messageData['timestamp'] as String),
+        responseTime: messageData['response_time'] as double? ?? 0.0,
       ),
     );
+
+    // Optionally update the last activity date for the session
+    await updateLastActivityDate(messageData['session_id']);
   }
+
 
   // Load message history for a specific session
   Future<List<Message>> loadMessageHistory(int sessionId) async {
@@ -111,6 +134,7 @@ class SessionAdapter extends TypeAdapter<Session> {
       id: reader.readInt(),
       name: reader.readString(),
       timestamp: reader.read() as DateTime?, // Read DateTime directly
+      lastActivityDate: reader.read() as DateTime?, // New field
     );
   }
 
@@ -118,9 +142,11 @@ class SessionAdapter extends TypeAdapter<Session> {
   void write(BinaryWriter writer, Session obj) {
     writer.writeInt(obj.id);
     writer.writeString(obj.name);
-    writer.write(obj.timestamp); // Write DateTime directly
+    writer.write(obj.timestamp); // Write timestamp directly
+    writer.write(obj.lastActivityDate); // Write lastActivityDate directly
   }
 }
+
 
 
   @override

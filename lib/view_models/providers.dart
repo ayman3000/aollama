@@ -22,7 +22,7 @@ class ChatHistoryNotifier extends StateNotifier<List<Message>> {
   }
 
   // Add a new conversation to the chat history
-  void addConversation(Message conversation) {
+  void addMessage(Message conversation) {
     state = [...state, conversation]; // Append the new conversation to the history
   }
 
