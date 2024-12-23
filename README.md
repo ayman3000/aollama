@@ -16,7 +16,7 @@
 1. Ensure you have Flutter installed. Follow the [Flutter installation guide](https://flutter.dev/docs/get-started/install) for your platform.
 2. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/aollama.git
+   git clone https://github.com/ayman3000/aollama.git
    cd aollama
    ```
 
@@ -58,7 +58,7 @@ This project is licensed under the **MIT License**. See the `LICENSE` file for m
 ```
 MIT License
 
-Copyright (c) 2024 [Your Name/Organization]
+Copyright (c) 2024 [Ayman Hamed]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -83,7 +83,7 @@ Contributions are welcome! Please follow these steps:
 For major changes, please open an issue first to discuss your ideas.
 
 ## Support
-For support or feedback, please contact us at **[support@aollama.com](mailto:support@aollama.com)**.
+For support or feedback, please contact us at **[ayman3000@gmail.com](mailto:ayman3000@gmail.com)**.
 
 ---
 
