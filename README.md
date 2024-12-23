@@ -68,7 +68,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 ```
 
 ## Rights
-- The name **AOllama** and associated branding are the exclusive property of [Your Name/Organization].
+- The name **AOllama** and associated branding are the exclusive property of [Ayman Hamed].
 - You are not permitted to publish or distribute the app under the name "AOllama" without explicit permission.
 - Modifications and forks of the project are allowed under the MIT license but must not use the name "AOllama" for distribution.
 
