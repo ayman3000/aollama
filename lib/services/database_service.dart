@@ -19,7 +19,7 @@ class DatabaseService {
       Hive.registerAdapter(MessageAdapter());
     }
 
-    await resetDatabase();
+    // await resetDatabase();
 
     try {
       await Hive.openBox<Session>(DatabaseService.sessionsBoxName);

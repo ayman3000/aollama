@@ -19,7 +19,7 @@ class HelpView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Welcome to AOllama!',
+                'Welcome to AOllama Studio!',
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -28,8 +28,17 @@ class HelpView extends StatelessWidget {
               ),
               SizedBox(height: 16),
               Text(
-                'This manual will guide you through the basic features of the app.',
+                'AOllama Studio is an independent software client powered by the Ollama server. This guide will walk you through the basics of using the app effectively.',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
+              ),
+              SizedBox(height: 16),
+              Text(
+                'Getting Started',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.cyan,
+                ),
               ),
               SizedBox(height: 16),
               Text(
@@ -41,7 +50,7 @@ class HelpView extends StatelessWidget {
                 ),
               ),
               Text(
-                '- Go to the sidebar and click on "Create New Session". Enter a name for your session and start interacting.',
+                '- Open the sidebar and click on "Create New Session". Enter a name for your session and begin interacting with the AI.',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
               SizedBox(height: 16),
@@ -54,7 +63,7 @@ class HelpView extends StatelessWidget {
                 ),
               ),
               Text(
-                '- Use the dropdown menu on the sidebar to select the AI model you want to interact with.',
+                '- Choose an AI model from the dropdown menu in the sidebar to tailor your experience.',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
               SizedBox(height: 16),
@@ -67,7 +76,7 @@ class HelpView extends StatelessWidget {
                 ),
               ),
               Text(
-                '- Type your messages in the input field at the bottom of the screen and press the send button to interact with the AI.',
+                '- Use the input field at the bottom to type messages and press the send button to engage with the AI.',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
               SizedBox(height: 16),
@@ -80,7 +89,7 @@ class HelpView extends StatelessWidget {
                 ),
               ),
               Text(
-                '- The chat history for each session is displayed in the main area. Scroll up to view past messages.',
+                '- Access your conversation history in the main chat area. Scroll to review previous messages.',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
               SizedBox(height: 16),
@@ -93,14 +102,39 @@ class HelpView extends StatelessWidget {
                 ),
               ),
               Text(
-                '- You can copy AI responses by clicking the copy icon next to them.',
+                '- Click the copy icon next to an AI response to copy it to your clipboard.',
+                style: TextStyle(fontSize: 16, color: Colors.white70),
+              ),
+              SizedBox(height: 16),
+              Text(
+                '6. Change Remote Server',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.cyan,
+                ),
+              ),
+              Text(
+                '- Navigate to the Settings page by clicking the gear icon on the top right of the app. From there, you can change the remote Ollama server URL to suit your setup.',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
               ),
               SizedBox(height: 16),
               Divider(color: Colors.grey),
               Text(
-                'For more information or troubleshooting, please contact our support team.',
+                'Stay tuned for new features coming soon. We hope you enjoy the app!',
                 style: TextStyle(fontSize: 16, color: Colors.white70),
+              ),
+
+              SizedBox(height: 16),
+              Divider(color: Colors.grey),
+              Center(
+                child: Text(
+                  '© 2024 Ayman Hamed',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
               ),
             ],
           ),
