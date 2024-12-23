@@ -75,12 +75,13 @@ class SidebarWidget extends StatelessWidget {
               Expanded(
                 child: PlatformTextField(
                   controller: sessionController,
+                  placeholder: 'Enter session name',
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     hintText: 'Enter session name',
                     hintStyle: const TextStyle(color: Colors.white60),
                     filled: true,
-                    fillColor: Colors.grey[800],
+                    fillColor: Colors.grey[900],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

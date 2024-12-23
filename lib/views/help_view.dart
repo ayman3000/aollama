@@ -23,7 +23,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.blue,
+                  color: Colors.white,
                 ),
               ),
               SizedBox(height: 16),
