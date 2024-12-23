@@ -37,7 +37,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               SizedBox(height: 16),
@@ -46,7 +46,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               Text(
@@ -59,7 +59,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               Text(
@@ -72,7 +72,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               Text(
@@ -85,7 +85,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               Text(
@@ -98,7 +98,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               Text(
@@ -111,7 +111,7 @@ class HelpView extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.cyan,
+                  color: Colors.blue,
                 ),
               ),
               Text(

@@ -32,7 +32,7 @@ class ChatViewModel extends StateNotifier<bool> {
         ];
       }
       catch(e){
-        print(e.toString());
+        // print(e.toString());
       }
       selectedSessionNotifier.state = newSession;
       await loadChatHistory(newSession.id);
@@ -55,7 +55,7 @@ class ChatViewModel extends StateNotifier<bool> {
         chatHistoryNotifier.clearHistory();
       }
     } catch (error) {
-      print('Error loading chat history: $error');
+      // print('Error loading chat history: $error');
     }
   }
 

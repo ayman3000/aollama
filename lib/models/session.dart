@@ -24,7 +24,7 @@ factory Session.fromMap(Map<String, dynamic> map) {
           ? DateTime.tryParse(map['lastActivityDate'])
           : null,
     );
-    print(session);
+    // print(session);
     return session;
   }
 }

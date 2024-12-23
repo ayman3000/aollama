@@ -24,9 +24,9 @@ class DatabaseService {
     try {
       await Hive.openBox<Session>(DatabaseService.sessionsBoxName);
       await Hive.openBox<Message>(DatabaseService.messagesBoxName);
-      print('Hive boxes opened successfully');
+      // print('Hive boxes opened successfully');
     } catch (e) {
-      print('Error opening Hive boxes: $e');
+      // print('Error opening Hive boxes: $e');
       // Optionally reset boxes here if corruption is detected
     }
   }
@@ -38,7 +38,7 @@ class DatabaseService {
 
     // Check for duplicate session names
     if (sessionsBox.values.any((session) => session.name == name)) {
-      print('Error: Duplicate session name');
+      // print('Error: Duplicate session name');
       return null;
     }
 

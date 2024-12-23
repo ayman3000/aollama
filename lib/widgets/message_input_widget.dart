@@ -75,7 +75,7 @@ class MessageInputWidget extends StatelessWidget {
                       ),
                     ),
                     onSubmitted: (text)  {
-                      print("submitted: $text");
+                      // print("submitted: $text");
                       onSendMessage(text);
                     },
                   ),

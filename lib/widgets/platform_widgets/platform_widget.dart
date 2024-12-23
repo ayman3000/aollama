@@ -14,7 +14,7 @@ abstract class PlatformWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (Platform.isIOS || Platform.isMacOS) {
       // Use Cupertino on iOS
-      print("iOS");
+      // print("iOS");
       return buildCupertinoWidget(context);
     }
     // Use Material design on Android and other platforms
