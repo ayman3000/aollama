@@ -10,12 +10,13 @@ class AppBarTitleWidget extends StatelessWidget {
     return LayoutBuilder(
         builder: (context, constraints) {
       const double sidebarThreshold = 800;
-      final bool isMinThreshold = constraints.maxWidth >= 200;
-      return isMinThreshold ? Row(
+      final bool showAll = constraints.maxWidth >= 300;
+      final bool showLogoOnly = constraints.maxWidth >= 200;
+      return Row(
         mainAxisSize: MainAxisSize.min, // Ensures the title contents are centered
         children: [
           // Logo Image
-          Container(
+          showLogoOnly ? Container(
             width: 50, // Adjust the size for a balanced look
             height: 50,
             decoration: BoxDecoration(
@@ -34,28 +35,14 @@ class AppBarTitleWidget extends StatelessWidget {
                 fit: BoxFit.cover, // Ensures the image fits properly
               ),
             ),
-          ),
-          const SizedBox(width: 12), // Slightly increase spacing for balance
+          ):const Text(''),
+          showAll ? const SizedBox(width: 12):const Text(''), // Slightly increase spacing for balance
           // App Name
-          // const Text(
-          //   "AOllama",
-          //   style: TextStyle(
-          //     color: Colors.white,
-          //     fontSize: 28, // Slightly larger font for emphasis
-          //     fontWeight: FontWeight.bold,
-          //     shadows: [
-          //       Shadow(
-          //         color: Colors.black45,
-          //         blurRadius: 3,
-          //         offset: Offset(1, 1),
-          //       ),
-          //     ],
-          //   ),
-          // ),
-          Column(
+
+          showAll ? const Column(
             children: [
-              const Text(
-                "AOllama",
+              Text(
+                "AOllama Studio",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 26, // Slightly larger font for emphasis
@@ -69,8 +56,8 @@ class AppBarTitleWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const Text(
-                "",
+              Text(
+                "Built on Ollama Server",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 12, // Slightly larger font for emphasis
@@ -87,9 +74,9 @@ class AppBarTitleWidget extends StatelessWidget {
 
 
             ],
-          ),
+          ):const Text(''),
         ],
-      ):Text('');
+      );
         }
     );
   }

@@ -17,7 +17,7 @@ class ChatHistoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black87, // Background color for the chat area
+      // color: Colors.black87, // Background color for the chat area
       child: ListView.builder(
         controller: scrollController,
         padding: const EdgeInsets.all(16.0),
@@ -33,7 +33,7 @@ class ChatHistoryWidget extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.blue,
+                    backgroundColor: Colors.blueGrey,
                     child: Icon(
                       Icons.account_circle_rounded,
                       color: Colors.white,
@@ -45,7 +45,7 @@ class ChatHistoryWidget extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.blue ,
+                        color: Colors.blueGrey ,
                         borderRadius: BorderRadius.circular(8),
                         boxShadow: const [
                           BoxShadow(
@@ -75,7 +75,7 @@ class ChatHistoryWidget extends StatelessWidget {
                           ),
                           IconButton(
                             icon: const Icon(Icons.copy, color: Colors.white),
-                            tooltip: 'Copy Response',
+                            tooltip: 'Copy Prompt',
                             onPressed: () {
                               onCopyResponse(conversation.userInput);
                             },
@@ -95,7 +95,7 @@ class ChatHistoryWidget extends StatelessWidget {
                     radius: 20,
                     backgroundColor: Colors.green,
                     child: Icon(
-                      Icons.smart_toy,
+                      Icons.laptop,
                       color: Colors.white,
                     ),
                   ),

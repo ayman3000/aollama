@@ -1,3 +1,4 @@
+import 'package:aollama/widgets/platform_widgets/platform_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -22,7 +23,7 @@ class MessageInputWidget extends StatelessWidget {
 
 
     return (isMinWidthThreshold || !isMinHeightThreshold) ? Container(
-      color: Colors.black87,
+      color: Colors.grey[880],
       padding: const EdgeInsets.all(16.0),
       child: Focus(
         focusNode: focusNode,
@@ -58,16 +59,17 @@ class MessageInputWidget extends StatelessWidget {
                   constraints: const BoxConstraints(
                     maxHeight: 200, // Set a maximum height
                   ),
-                  child: TextField(
+                  child: PlatformTextField(
                     controller: messageController,
                     maxLines: null, // Allows the TextField to expand vertically
                     keyboardType: TextInputType.multiline, // Enables multiline input
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white, fontSize: 25),
+                    placeholder: 'Write your message...',
                     decoration: InputDecoration(
                       hintText: 'Write your message...',
                       hintStyle: const TextStyle(color: Colors.white60),
-                      filled: true,
-                      fillColor: Colors.grey[800],
+                      filled: false,
+                      fillColor: Colors.grey,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),

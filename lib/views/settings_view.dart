@@ -1,3 +1,4 @@
+import 'package:aollama/widgets/platform_widgets/platform_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/ollama_service.dart';
@@ -55,7 +56,7 @@ class SettingsView extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                TextField(
+                PlatformTextField(
                   controller: _baseUrlController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(

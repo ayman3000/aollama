@@ -1,3 +1,7 @@
+import 'package:aollama/widgets/platform_widgets/platform_text.dart';
+import 'package:aollama/widgets/platform_widgets/platform_text_button.dart';
+
+import 'platform_widgets/platform_textfield.dart';
 import 'package:flutter/material.dart';
 import '../models/session.dart';
 import 'models_widget.dart'; // Import ModelsWidget
@@ -57,19 +61,19 @@ class SidebarWidget extends StatelessWidget {
           ),
 
           // Create New Session Section
-          const Text(
-            'Create New Session',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+          PlatformText(
+            text: 'Create New Session',
+            // style: TextStyle(
+            //   fontSize: 18,
+            //   color: Colors.white,
+            //   fontWeight: FontWeight.bold,
+            // ),
           ),
           const SizedBox(height: 10),
           Row(
             children: [
               Expanded(
-                child: TextField(
+                child: PlatformTextField(
                   controller: sessionController,
                   style: const TextStyle(color: Colors.white),
                   decoration: InputDecoration(
@@ -111,13 +115,13 @@ class SidebarWidget extends StatelessWidget {
 
           // Session History Section
           const Divider(color: Colors.grey, height: 20),
-          const Text(
-            'Session History',
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+          PlatformText(
+            text: 'Session History',
+            // style: TextStyle(
+            //   fontSize: 18,
+            //   color: Colors.white,
+            //   fontWeight: FontWeight.bold,
+            // ),
           ),
           const Divider(color: Colors.white),
 
@@ -146,12 +150,12 @@ class SidebarWidget extends StatelessWidget {
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: TextButton(
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 12, horizontal: 8),
+                      child: PlatformTextButton(
+                        // style: TextButton.styleFrom(
+                        //   padding: const EdgeInsets.symmetric(
+                        //       vertical: 12, horizontal: 8),
                           foregroundColor: Colors.white,
-                        ),
+                        // ),
                         onPressed: () {
                           onSessionSelected(session);
                         },

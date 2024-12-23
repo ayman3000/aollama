@@ -1,3 +1,4 @@
+import 'package:aollama/widgets/platform_widgets/platform_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../views/settings_view.dart';
@@ -104,8 +105,8 @@ class HomeView extends ConsumerWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           const double sidebarThreshold = 800;
-          const double heightThreshold = 300;
-          const double widthThreshold = 300;
+          const double heightThreshold = 450;
+          const double widthThreshold = 600;
           final bool isWideScreen = constraints.maxWidth >= sidebarThreshold;
           final bool isMinThreshold = constraints.maxWidth >= widthThreshold;
           final bool isMinHeightThreshold = constraints.maxHeight >= heightThreshold;
@@ -115,7 +116,7 @@ class HomeView extends ConsumerWidget {
               // Sidebar for Wide Screens
               if (isWideScreen)
                 SizedBox(
-                  width: 270,
+                  width: 300,
                   child: SidebarWidget(
                     sessionList: sessionList,
                     selectedSession: selectedSession,
@@ -200,10 +201,10 @@ class HomeView extends ConsumerWidget {
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.black.withOpacity(0.9),
+                                      // color: Colors.grey,
                                       borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        topRight: Radius.circular(12),
+                                        topLeft: Radius.circular(15),
+                                        topRight: Radius.circular(15),
                                       ),
                                       boxShadow: [
                                         BoxShadow(
@@ -222,35 +223,38 @@ class HomeView extends ConsumerWidget {
                                     ),
                                   ),
                                 ),
-                                MessageInputWidget(
-                                  isMinHeightThreshold: isMinHeightThreshold,
-                                  isMinWidthThreshold: isMinThreshold,
-                                  scrollController: scrollController,
-                                  onSendMessage: (message) async {
-                                    if (selectedSession != null) {
-                                      try {
-                                        await viewModel.sendMessage(message, selectedSession.id);
-                                        scrollToBottom();
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text(e.toString()),
-                                            backgroundColor: Colors.redAccent,
-                                          ),
-                                        );
+                                Container(
+                                  color: Colors.blueGrey[600],
+
+
+                                  // color: Colors.grey[530],
+                                  child: MessageInputWidget(
+                                    isMinHeightThreshold: isMinHeightThreshold,
+                                    isMinWidthThreshold: isMinThreshold,
+                                    scrollController: scrollController,
+                                    onSendMessage: (message) async {
+                                      if (selectedSession != null) {
+                                        try {
+                                          await viewModel.sendMessage(message, selectedSession.id);
+                                          scrollToBottom();
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(e.toString()),
+                                              backgroundColor: Colors.redAccent,
+                                            ),
+                                          );
+                                        }
                                       }
-                                    }
-                                  },
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
                           ],
                           if (isLoading)
                             const Center(
-                              child: RotatingImageWidget(
-                                imagePath: 'assets/logo.png',
-                                size: 50.0,
-                              ),
+                              child: PlatformProgressIndicator(size: 30,),
                             ),
                         ],
                       ),

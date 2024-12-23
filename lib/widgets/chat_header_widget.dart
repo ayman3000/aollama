@@ -14,7 +14,7 @@ class ChatHeaderWidget extends StatelessWidget {
 
           return isMinThreshold ? Container(
             decoration: BoxDecoration(
-              color: Colors.black87,
+              color: Colors.grey[830],
               border: Border(
                 bottom: BorderSide(
                   color: Colors.grey[700]!,
@@ -47,7 +47,7 @@ class ChatHeaderWidget extends StatelessWidget {
                   selectedSession?.name ?? "No Session Selected",
                   style: const TextStyle(
                     fontSize: 25,
-                    color: Colors.blue,
+                    color: Colors.blueGrey,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
