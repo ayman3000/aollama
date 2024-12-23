@@ -1,4 +1,4 @@
-# AOllama
+# AOllama Studio
 
 **AOllama** is a sleek and intuitive AI chat application built with Flutter, enabling seamless interactions with local and remote Ollama models. Designed for privacy and performance, AOllama allows users to explore AI capabilities, manage conversations, and enjoy a responsive and customizable experience.
 
