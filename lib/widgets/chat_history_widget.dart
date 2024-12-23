@@ -35,47 +35,53 @@ class ChatHistoryWidget extends StatelessWidget {
                     radius: 20,
                     backgroundColor: Colors.blue,
                     child: Icon(
-                      Icons.person,
+                      Icons.account_circle_rounded,
                       color: Colors.white,
                     ),
                   ),
                   const SizedBox(width: 10),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 5),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 4,
-                          offset: Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'User:',
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.blue ,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                            offset: Offset(2, 2),
                           ),
-                        ),
-                        const SizedBox(height: 5),
-                        Text(
-                          conversation.userInput,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: RichText(
+                              text: TextSpan(
+                                children: [
+
+                                  TextSpan(
+                                    text: conversation.userInput,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 4, // Limit to 4 lines
-                        ),
-                      ],
+                          IconButton(
+                            icon: const Icon(Icons.copy, color: Colors.white),
+                            tooltip: 'Copy Response',
+                            onPressed: () {
+                              onCopyResponse(conversation.userInput);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

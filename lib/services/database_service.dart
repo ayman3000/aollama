@@ -149,12 +149,12 @@ class SessionAdapter extends TypeAdapter<Session> {
 
 
 
-  @override
-  void write(BinaryWriter writer, Session obj) {
-    writer.writeInt(obj.id);
-    writer.writeString(obj.name);
-    writer.writeString(obj.timestamp?.toIso8601String() ?? ''); // Write empty string if null
-  }
+@override
+void write(BinaryWriter writer, Session obj) {
+  writer.writeInt(obj.id);
+  writer.writeString(obj.name);
+  writer.writeString(obj.timestamp?.toIso8601String() ?? ''); // Write empty string if null
+}
 
 
 // Hive adapter for the Message class

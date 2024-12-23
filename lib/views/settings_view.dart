@@ -13,17 +13,18 @@ class SettingsView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+
       appBar: AppBar(
         title: const Text("Settings"),
         centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.black87,
       ),
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[850],
       body: Center(
         child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          color: Colors.grey[900],
+          margin: const EdgeInsets.symmetric(horizontal: 60),
+          color: Colors.black87,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

@@ -9,6 +9,7 @@ import '../widgets/chat_history_widget.dart';
 import '../widgets/message_input_widget.dart';
 import '../widgets/rotating_image_widget.dart';
 import '../widgets/sidebar_widget.dart';
+import 'help_view.dart';
 
 class HomeView extends ConsumerWidget {
   final ScrollController scrollController = ScrollController();
@@ -31,12 +32,25 @@ class HomeView extends ConsumerWidget {
     }
 
     return Scaffold(
+      backgroundColor: Colors.grey[850],
       appBar: AppBar(
         centerTitle: true,
         elevation: 5,
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         title: const AppBarTitleWidget(),
         actions: [
+          IconButton(onPressed:(){
+            Navigator.push (
+              context,
+              MaterialPageRoute (
+                builder: (BuildContext context) => const HelpView(),
+              ),
+            );
+
+          }
+
+              , icon: Icon(Icons.help)
+          ),
           IconButton(
             icon: const Icon(Icons.settings),
             tooltip: 'Settings',
@@ -90,7 +104,11 @@ class HomeView extends ConsumerWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           const double sidebarThreshold = 800;
+          const double heightThreshold = 300;
+          const double widthThreshold = 300;
           final bool isWideScreen = constraints.maxWidth >= sidebarThreshold;
+          final bool isMinThreshold = constraints.maxWidth >= widthThreshold;
+          final bool isMinHeightThreshold = constraints.maxHeight >= heightThreshold;
 
           return Row(
             children: [
@@ -178,7 +196,7 @@ class HomeView extends ConsumerWidget {
                             // Main Chat UI
                             Column(
                               children: [
-                                ChatHeaderWidget(selectedSession: selectedSession),
+                                ChatHeaderWidget(isMinThreshold: isMinThreshold, selectedSession: selectedSession),
                                 Expanded(
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -205,6 +223,8 @@ class HomeView extends ConsumerWidget {
                                   ),
                                 ),
                                 MessageInputWidget(
+                                  isMinHeightThreshold: isMinHeightThreshold,
+                                  isMinWidthThreshold: isMinThreshold,
                                   scrollController: scrollController,
                                   onSendMessage: (message) async {
                                     if (selectedSession != null) {
@@ -229,7 +249,7 @@ class HomeView extends ConsumerWidget {
                             const Center(
                               child: RotatingImageWidget(
                                 imagePath: 'assets/logo.png',
-                                size: 80.0,
+                                size: 50.0,
                               ),
                             ),
                         ],

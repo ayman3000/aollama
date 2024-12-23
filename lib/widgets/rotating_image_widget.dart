@@ -24,7 +24,7 @@ class _RotatingImageWidgetState extends State<RotatingImageWidget> with SingleTi
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 3),
     )..repeat(); // Makes the animation loop indefinitely
   }
 
@@ -40,7 +40,7 @@ class _RotatingImageWidgetState extends State<RotatingImageWidget> with SingleTi
       animation: _controller,
       builder: (context, child) {
         return Transform.rotate(
-          angle: _controller.value * 3 * math.pi, // Rotate 360 degrees
+          angle: _controller.value * 4 * math.pi, // Rotate 360 degrees
           child: Image.asset(
             widget.imagePath,
             width: widget.size,
