@@ -1,6 +1,7 @@
+import 'package:aollama/app_colors.dart';
 import 'package:aollama/models/message.dart';
 import 'package:flutter/material.dart';
-import '../models/session.dart';
+import 'message_body.dart';
 
 class ChatHistoryWidget extends StatelessWidget {
   final List<Message> chatHistory;
@@ -17,7 +18,6 @@ class ChatHistoryWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.black87, // Background color for the chat area
       child: ListView.builder(
         controller: scrollController,
         padding: const EdgeInsets.all(16.0),
@@ -27,131 +27,20 @@ class ChatHistoryWidget extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // User Message
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.blueGrey,
-                    child: Icon(
-                      Icons.account_circle_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.blueGrey ,
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-
-                                  TextSpan(
-                                    text: conversation.userInput,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.copy, color: Colors.white),
-                            tooltip: 'Copy Prompt',
-                            onPressed: () {
-                              onCopyResponse(conversation.userInput);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              MessageBubble(
+                isUser: true,
+                avatarIcon: Icons.account_circle_rounded,
+                backgroundColor: AppColors.userMessageBackground,
+                content: conversation.userInput,
+                onCopy: () => onCopyResponse(conversation.userInput),
               ),
               const SizedBox(height: 10),
-              // Model Response
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.green,
-                    child: Icon(
-                      Icons.laptop,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[800],
-                        borderRadius: BorderRadius.circular(8),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 4,
-                            offset: Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '${conversation.modelName}: ',
-                                    style: const TextStyle(
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: conversation.botResponse,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.copy, color: Colors.white),
-                            tooltip: 'Copy Response',
-                            onPressed: () {
-                              onCopyResponse(conversation.botResponse);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+              MessageBubble(
+                isUser: false,
+                avatarIcon: Icons.laptop,
+                backgroundColor: AppColors.botMessageBackground,
+                content: '${conversation.modelName}: ${conversation.botResponse}',
+                onCopy: () => onCopyResponse(conversation.botResponse),
               ),
             ],
           );

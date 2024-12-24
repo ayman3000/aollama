@@ -1,3 +1,4 @@
+import 'package:aollama/app_colors.dart';
 import 'package:aollama/widgets/platform_widgets/platform_text.dart';
 import 'package:aollama/widgets/platform_widgets/platform_text_button.dart';
 
@@ -31,8 +32,8 @@ class SidebarWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.blueGrey.shade900, Colors.black],
+        gradient: const LinearGradient(
+          colors: [AppColors.sidebarBackground, Colors.black], //  [Colors.blueGrey.shade900, Colors.black],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -147,7 +148,7 @@ class SidebarWidget extends StatelessWidget {
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       decoration: BoxDecoration(
                         color: session == selectedSession
-                            ? Colors.blueGrey
+                            ? AppColors.userMessageBackground
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(4),
                       ),

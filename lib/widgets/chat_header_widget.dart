@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../app_colors.dart';
 import '../models/session.dart';
 
 class ChatHeaderWidget extends StatelessWidget {
@@ -39,15 +40,15 @@ class ChatHeaderWidget extends StatelessWidget {
                   'Active Session - ',
                   style: TextStyle(
                     fontSize: 20,
-                    color: Colors.white,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   selectedSession?.name ?? "No Session Selected",
-                  style: const TextStyle(
+                  style:  const TextStyle(
                     fontSize: 25,
-                    color: Colors.blueGrey,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

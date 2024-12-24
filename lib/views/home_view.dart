@@ -1,3 +1,4 @@
+import 'package:aollama/app_colors.dart';
 import 'package:aollama/widgets/platform_widgets/platform_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,7 +9,6 @@ import '../widgets/appbar_title_widget.dart';
 import '../widgets/chat_header_widget.dart';
 import '../widgets/chat_history_widget.dart';
 import '../widgets/message_input_widget.dart';
-import '../widgets/rotating_image_widget.dart';
 import '../widgets/sidebar_widget.dart';
 import 'help_view.dart';
 
@@ -54,6 +54,7 @@ class HomeView extends ConsumerWidget {
           ),
           IconButton(
             icon: const Icon(Icons.settings),
+            color: AppColors.iconActive,
             tooltip: 'Settings',
             onPressed: () {
               Navigator.push(
@@ -224,8 +225,9 @@ class HomeView extends ConsumerWidget {
                                   ),
                                 ),
                                 Container(
-                                  color: Colors.blueGrey[600],
+                                  // color: Colors.blueGrey[600],
 
+                                  color: AppColors.messageBackground,
 
                                   // color: Colors.grey[530],
                                   child: MessageInputWidget(

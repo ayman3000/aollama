@@ -16,27 +16,27 @@ class AppBarTitleWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min, // Ensures the title contents are centered
         children: [
           // Logo Image
-          showLogoOnly ? Container(
-            width: 50, // Adjust the size for a balanced look
-            height: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle, // Makes the logo circular
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5), // Add a subtle shadow
-                  blurRadius: 4,
-                  offset: Offset(2, 2),
-                ),
-              ],
-            ),
-            child: ClipOval(
-              child: Image.asset(
-                'assets/logo.png', // Path to the logo image
-                fit: BoxFit.cover, // Ensures the image fits properly
-              ),
-            ),
-          ):const Text(''),
-          showAll ? const SizedBox(width: 12):const Text(''), // Slightly increase spacing for balance
+          // showLogoOnly ? Container(
+          //   width: 50, // Adjust the size for a balanced look
+          //   height: 50,
+          //   decoration: BoxDecoration(
+          //     shape: BoxShape.circle, // Makes the logo circular
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: Colors.black.withOpacity(0.5), // Add a subtle shadow
+          //         blurRadius: 4,
+          //         offset: Offset(2, 2),
+          //       ),
+          //     ],
+          //   ),
+          //   child: ClipOval(
+          //     child: Image.asset(
+          //       'assets/logo.png', // Path to the logo image
+          //       fit: BoxFit.cover, // Ensures the image fits properly
+          //     ),
+          //   ),
+          // ):const Text(''),
+          // showAll ? const SizedBox(width: 12):const Text(''), // Slightly increase spacing for balance
           // App Name
 
           showAll ? const Column(
